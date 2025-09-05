@@ -20,9 +20,6 @@ function playSlot() {
   }
   money -= cost;
 
-  // レバー音 iksg.mp3 再生
-  document.getElementById("leverSound").play();
-
   const slots = [
     document.getElementById("slot1"),
     document.getElementById("slot2"),
