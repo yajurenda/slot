@@ -2,14 +2,7 @@ let money = 810;
 const cost = 10;
 const jackpot = 810;
 
-// 出現確率テーブル（1.pngは5%、2-5.pngで95%を分割）
-const weightedImages = [
-  { src: "1.png", weight: 0.05 },
-  { src: "2.png", weight: 0.2375 },
-  { src: "3.png", weight: 0.2375 },
-  { src: "4.png", weight: 0.2375 },
-  { src: "5.png", weight: 0.2375 }
-];
+const slotImages = ["1.png", "2.png", "3.png", "4.png", "5.png"];
 
 document.getElementById("play").addEventListener("click", playSlot);
 
@@ -33,29 +26,19 @@ function playSlot() {
 
 function spinSlot(slot, index) {
   let spin = setInterval(() => {
-    // 演出用にランダム画像を表示（均等ランダム）
-    const rand = Math.floor(Math.random() * weightedImages.length);
-    slot.src = weightedImages[rand].src;
+    const randImg = slotImages[Math.floor(Math.random() * slotImages.length)];
+    slot.src = randImg;
   }, 100);
 
   setTimeout(() => {
     clearInterval(spin);
 
-    // 確率テーブルから最終画像を選ぶ
-    slot.src = getWeightedRandomImage();
+    // 最終的に止まる絵柄
+    const finalImg = slotImages[Math.floor(Math.random() * slotImages.length)];
+    slot.src = finalImg;
 
-    if (index === 2) checkResult();
+    if (index === 2) checkResult(); // 最後に判定
   }, 2000 + index * 500);
-}
-
-function getWeightedRandomImage() {
-  const r = Math.random();
-  let sum = 0;
-  for (let img of weightedImages) {
-    sum += img.weight;
-    if (r < sum) return img.src;
-  }
-  return weightedImages[weightedImages.length - 1].src;
 }
 
 function checkResult() {
@@ -65,6 +48,7 @@ function checkResult() {
     document.getElementById("slot3").src
   ];
 
+  // "1.png" が揃ったら当たり
   if (slots.every(src => src.includes("1.png"))) {
     money += jackpot;
     document.getElementById("winSound").play();
